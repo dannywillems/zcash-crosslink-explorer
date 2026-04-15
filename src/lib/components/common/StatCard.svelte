@@ -24,7 +24,12 @@
   >
     {label}
   </p>
-  <p class="mt-1 text-2xl font-bold tabular-nums">{value}</p>
+  <p
+    class="mt-1 font-bold tabular-nums break-all
+           {value.length > 20 ? 'text-xs font-mono' : 'text-2xl'}"
+  >
+    {value}
+  </p>
   {#if subtext}
     <p class="mt-0.5 text-xs text-[var(--fg-muted)]">
       {subtext}

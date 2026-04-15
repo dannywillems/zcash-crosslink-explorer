@@ -63,6 +63,19 @@ export function formatBytes(bytes: number): string {
   return `${bytes} B`;
 }
 
+export function toHex(value: unknown): string {
+  if (typeof value === 'string') {
+    // Already a hex string
+    if (/^[0-9a-fA-F]+$/.test(value)) return value;
+    return value;
+  }
+  if (Array.isArray(value)) {
+    // Byte array like [189, 60, 207, ...]
+    return value.map((b: number) => b.toString(16).padStart(2, '0')).join('');
+  }
+  return String(value);
+}
+
 export function isBlockHash(s: string): boolean {
   return /^[0-9a-fA-F]{64}$/.test(s);
 }

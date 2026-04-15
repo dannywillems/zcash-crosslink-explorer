@@ -37,7 +37,7 @@
     },
   ];
   import { connected } from '$lib/stores/endpoint.js';
-  import { formatNumber } from '$lib/utils/format.js';
+  import { formatNumber, toHex } from '$lib/utils/format.js';
   import type { FinalityInfo } from '$lib/types/index.js';
 
   let finalityInfo = $state<FinalityInfo | null>(null);
@@ -60,6 +60,9 @@
         getBlockchainInfo(),
       ]);
       finalityInfo = finality;
+      if (finalityInfo) {
+        finalityInfo.hash = toHex(finalityInfo.hash);
+      }
       tipHeight = chain.blocks;
     } catch (e) {
       error = e instanceof Error ? e.message : 'Failed to load';
@@ -88,11 +91,7 @@
         value={formatNumber(tipHeight - finalityInfo.height)}
         subtext="blocks behind tip"
       />
-      <StatCard
-        label="Finalized Hash"
-        value={finalityInfo.hash.slice(0, 12) + '...'}
-        subtext={finalityInfo.hash}
-      />
+      <StatCard label="Finalized Hash" value={finalityInfo.hash} />
     </div>
   {:else if loading}
     <LoadingSpinner text="Loading finality info..." />
