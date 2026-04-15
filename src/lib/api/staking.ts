@@ -26,3 +26,17 @@ export async function getTflTxFinalityFromHash(hash: string): Promise<unknown> {
 export async function getTflFatPointerToBftChainTip(): Promise<unknown> {
   return rpcCall<unknown>('get_tfl_fat_pointer_to_bft_chain_tip');
 }
+
+export interface RosterMember {
+  pub_key: string;
+  voting_power: number;
+  txids: { txid: string; zats: number }[];
+}
+
+export async function getTflRosterZats(): Promise<RosterMember[]> {
+  return rpcCall<RosterMember[]>('get_tfl_roster_zats');
+}
+
+export async function getBondInfo(bondKey: string): Promise<unknown> {
+  return rpcCall<unknown>('getbondinfo', [bondKey]);
+}

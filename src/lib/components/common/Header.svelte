@@ -12,6 +12,7 @@
     { href: `${base}/blocks`, label: 'Blocks' },
     { href: `${base}/transactions`, label: 'Transactions' },
     { href: `${base}/chain-view`, label: 'Chain View' },
+    { href: `${base}/top-addresses`, label: 'Top Addresses' },
     { href: `${base}/staking`, label: 'Staking' },
     { href: `${base}/analytics`, label: 'Analytics' },
   ];

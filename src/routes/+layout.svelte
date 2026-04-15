@@ -20,6 +20,14 @@
     class="border-t border-[var(--bd)] py-4 text-center
            text-xs text-[var(--fg-muted)]"
   >
-    Zcash Crosslink Explorer
+    Zcash Crosslink Explorer -
+    <a
+      href="https://github.com/dannywillems/zcash-crosslink-explorer"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="hover:text-[var(--fg)]"
+    >
+      GitHub
+    </a>
   </footer>
 </div>
