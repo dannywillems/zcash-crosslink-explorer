@@ -1,0 +1,24 @@
+import { rpcCall } from './rpc.js';
+import type { StakingRosterEntry, FinalityInfo } from '$lib/types/index.js';
+
+export async function getTflRosterZec(): Promise<StakingRosterEntry[]> {
+  return rpcCall<StakingRosterEntry[]>('get_tfl_roster_zec');
+}
+
+export async function getTflFinalBlockHash(): Promise<string> {
+  return rpcCall<string>('get_tfl_final_block_hash');
+}
+
+export async function getTflFinalBlockHeightAndHash(): Promise<FinalityInfo> {
+  return rpcCall<FinalityInfo>('get_tfl_final_block_height_and_hash');
+}
+
+export async function getTflBlockFinalityFromHash(
+  hash: string,
+): Promise<unknown> {
+  return rpcCall<unknown>('get_tfl_block_finality_from_hash', [hash]);
+}
+
+export async function getTflTxFinalityFromHash(hash: string): Promise<unknown> {
+  return rpcCall<unknown>('get_tfl_tx_finality_from_hash', [hash]);
+}
