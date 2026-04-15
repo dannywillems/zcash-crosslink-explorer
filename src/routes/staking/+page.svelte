@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { base } from '$app/paths';
   import ValidatorRoster from '$lib/components/staking/ValidatorRoster.svelte';
   import StatCard from '$lib/components/common/StatCard.svelte';
   import LoadingSpinner from '$lib/components/common/LoadingSpinner.svelte';
@@ -82,16 +83,47 @@
   {#if isConnected && !loading && !error && finalityInfo}
     <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
       <StatCard label="Tip Height" value={formatNumber(tipHeight)} />
-      <StatCard
-        label="Finalized Height"
-        value={formatNumber(finalityInfo.height)}
-      />
+      <div
+        class="rounded-lg border border-[var(--bd)]
+               bg-[var(--bg-raised)] p-4"
+      >
+        <p
+          class="text-xs font-medium uppercase tracking-wider
+                 text-[var(--fg-muted)]"
+        >
+          Finalized Height
+        </p>
+        <a
+          href="{base}/block/{finalityInfo.height}"
+          class="mt-1 block text-2xl font-bold tabular-nums
+                 hover:underline"
+        >
+          {formatNumber(finalityInfo.height)}
+        </a>
+      </div>
       <StatCard
         label="Finality Gap"
         value={formatNumber(tipHeight - finalityInfo.height)}
         subtext="blocks behind tip"
       />
-      <StatCard label="Finalized Hash" value={finalityInfo.hash} />
+      <div
+        class="rounded-lg border border-[var(--bd)]
+               bg-[var(--bg-raised)] p-4"
+      >
+        <p
+          class="text-xs font-medium uppercase tracking-wider
+                 text-[var(--fg-muted)]"
+        >
+          Finalized Hash
+        </p>
+        <a
+          href="{base}/block/{finalityInfo.hash}"
+          class="mt-1 block font-mono text-xs font-bold
+                 break-all hover:underline"
+        >
+          {finalityInfo.hash}
+        </a>
+      </div>
     </div>
   {:else if loading}
     <LoadingSpinner text="Loading finality info..." />
