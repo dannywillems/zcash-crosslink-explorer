@@ -16,10 +16,10 @@ ENV BASE_PATH=${BASE_PATH}
 RUN npx vite build
 
 # Runtime stage
-FROM nginxinc/nginx-unprivileged:1.29-alpine
+FROM caddy:2-alpine
 
-COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /app/build /usr/share/nginx/html
+COPY docker/Caddyfile /etc/caddy/Caddyfile
+COPY --from=build /app/build /srv
 
 EXPOSE 8080
 
