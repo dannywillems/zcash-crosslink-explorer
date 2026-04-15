@@ -28,7 +28,7 @@ jobs:
       - run: npx vite build
         env:
           BASE_PATH: /zcash-crosslink-explorer
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: build/
 
