@@ -3,6 +3,7 @@
   import BlockDetail from '$lib/components/blocks/BlockDetail.svelte';
   import LoadingSpinner from '$lib/components/common/LoadingSpinner.svelte';
   import ErrorMessage from '$lib/components/common/ErrorMessage.svelte';
+  import RpcDebug from '$lib/components/common/RpcDebug.svelte';
   import { getBlock } from '$lib/api/index.js';
   import { connected } from '$lib/stores/endpoint.js';
   import { isBlockHeight } from '$lib/utils/format.js';
@@ -64,4 +65,23 @@
   <ErrorMessage message={error} />
 {:else if block}
   <BlockDetail {block} />
+  <RpcDebug
+    queries={[
+      {
+        method: 'getblock',
+        params: [block.hash, 1],
+        description: 'Block data (verbosity=1)',
+      },
+      {
+        method: 'getblock',
+        params: [block.hash, 2],
+        description: 'Block data with full txs (verbosity=2)',
+      },
+      {
+        method: 'get_tfl_block_finality_from_hash',
+        params: [block.hash],
+        description: 'Finality status for this block',
+      },
+    ]}
+  />
 {/if}

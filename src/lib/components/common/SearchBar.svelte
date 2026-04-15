@@ -32,6 +32,13 @@
       return;
     }
 
+    // Address: t-addr or z-addr
+    if (/^t[a-zA-Z0-9]{33,34}$/.test(q) || /^z[a-zA-Z0-9]{77,}$/.test(q)) {
+      query = '';
+      goto(`${base}/address/${q}`);
+      return;
+    }
+
     // 64 hex chars: could be block hash or tx hash
     if (/^[0-9a-fA-F]{64}$/.test(q)) {
       searching = true;
@@ -59,7 +66,7 @@
       return;
     }
 
-    error = 'Enter a block height or 64-char hex hash';
+    error = 'Enter a height, hash, or address';
   }
 </script>
 
@@ -67,7 +74,7 @@
   <input
     type="text"
     bind:value={query}
-    placeholder="Height, block hash, or tx hash"
+    placeholder="Height, hash, or address"
     class="w-48 rounded-md border border-[var(--bd)]
            bg-[var(--bg)] px-3 py-1 text-xs
            font-mono text-[var(--fg)]

@@ -1,5 +1,49 @@
 <script lang="ts">
+  import RpcDebug from '$lib/components/common/RpcDebug.svelte';
   import StatCard from '$lib/components/common/StatCard.svelte';
+
+  const queries = [
+    {
+      method: 'getblockchaininfo',
+      params: [],
+      description: 'Chain info, height, difficulty',
+    },
+    {
+      method: 'getmininginfo',
+      params: [],
+      description: 'Mining stats and hash rate',
+    },
+    {
+      method: 'getmempoolinfo',
+      params: [],
+      description: 'Mempool summary (may fail)',
+    },
+    {
+      method: 'getrawmempool',
+      params: [true],
+      description: 'Verbose mempool entries',
+    },
+    {
+      method: 'getnetworksolps',
+      params: [120, -1],
+      description: 'Network solution rate',
+    },
+    {
+      method: 'getdifficulty',
+      params: [],
+      description: 'Current difficulty',
+    },
+    {
+      method: 'getpeerinfo',
+      params: [],
+      description: 'Connected peers',
+    },
+    {
+      method: 'getinfo',
+      params: [],
+      description: 'General node info',
+    },
+  ];
   import LoadingSpinner from '$lib/components/common/LoadingSpinner.svelte';
   import ErrorMessage from '$lib/components/common/ErrorMessage.svelte';
   import {
@@ -203,5 +247,6 @@
         Network Peers ({peerCount})
       </h3>
     </div>
+    <RpcDebug {queries} />
   {/if}
 </div>

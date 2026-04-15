@@ -143,7 +143,12 @@
             <div>
               {#if output.scriptPubKey.addresses}
                 {#each output.scriptPubKey.addresses as addr}
-                  <p class="font-mono text-sm">{addr}</p>
+                  <a
+                    href="{base}/address/{addr}"
+                    class="font-mono text-sm hover:underline"
+                  >
+                    {addr}
+                  </a>
                 {/each}
               {:else}
                 <span class="text-xs text-[var(--fg-muted)]">

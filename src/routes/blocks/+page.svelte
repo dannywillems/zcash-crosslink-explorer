@@ -3,9 +3,28 @@
   import Pagination from '$lib/components/common/Pagination.svelte';
   import LoadingSpinner from '$lib/components/common/LoadingSpinner.svelte';
   import ErrorMessage from '$lib/components/common/ErrorMessage.svelte';
+  import RpcDebug from '$lib/components/common/RpcDebug.svelte';
   import { getBlockchainInfo, getBlockRange } from '$lib/api/index.js';
   import { connected } from '$lib/stores/endpoint.js';
   import type { Block } from '$lib/types/index.js';
+
+  const queries = [
+    {
+      method: 'getblockchaininfo',
+      params: [],
+      description: 'Chain height for pagination',
+    },
+    {
+      method: 'getblockhash',
+      params: [0],
+      description: 'Get hash for block at height',
+    },
+    {
+      method: 'getblock',
+      params: ['(hash)', 1],
+      description: 'Full block data (verbosity=1)',
+    },
+  ];
 
   const PAGE_SIZE = 25;
 
@@ -76,4 +95,5 @@
     </div>
     <Pagination {currentPage} {totalPages} onPageChange={loadPage} />
   {/if}
+  <RpcDebug {queries} />
 </div>

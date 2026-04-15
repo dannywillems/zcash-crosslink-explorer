@@ -3,10 +3,39 @@
   import StatCard from '$lib/components/common/StatCard.svelte';
   import LoadingSpinner from '$lib/components/common/LoadingSpinner.svelte';
   import ErrorMessage from '$lib/components/common/ErrorMessage.svelte';
+  import RpcDebug from '$lib/components/common/RpcDebug.svelte';
   import {
     getTflFinalBlockHeightAndHash,
     getBlockchainInfo,
   } from '$lib/api/index.js';
+
+  const queries = [
+    {
+      method: 'get_tfl_roster_zec',
+      params: [],
+      description: 'Validator roster with ZEC amounts',
+    },
+    {
+      method: 'get_tfl_roster_zats',
+      params: [],
+      description: 'Validator roster with zatoshi amounts',
+    },
+    {
+      method: 'get_tfl_final_block_height_and_hash',
+      params: [],
+      description: 'Current finalized PoW block',
+    },
+    {
+      method: 'get_tfl_final_block_hash',
+      params: [],
+      description: 'Finalized block hash only',
+    },
+    {
+      method: 'get_tfl_fat_pointer_to_bft_chain_tip',
+      params: [],
+      description: 'BFT chain tip pointer',
+    },
+  ];
   import { connected } from '$lib/stores/endpoint.js';
   import { formatNumber } from '$lib/utils/format.js';
   import type { FinalityInfo } from '$lib/types/index.js';
@@ -72,4 +101,5 @@
   {/if}
 
   <ValidatorRoster />
+  <RpcDebug {queries} />
 </div>

@@ -3,6 +3,7 @@
   import TransactionDetail from '$lib/components/transactions/TransactionDetail.svelte';
   import LoadingSpinner from '$lib/components/common/LoadingSpinner.svelte';
   import ErrorMessage from '$lib/components/common/ErrorMessage.svelte';
+  import RpcDebug from '$lib/components/common/RpcDebug.svelte';
   import { getRawTransaction } from '$lib/api/index.js';
   import { connected } from '$lib/stores/endpoint.js';
   import type { RawTransaction } from '$lib/types/index.js';
@@ -59,4 +60,18 @@
   <ErrorMessage message={error} />
 {:else if tx}
   <TransactionDetail {tx} />
+  <RpcDebug
+    queries={[
+      {
+        method: 'getrawtransaction',
+        params: [tx.txid, 1],
+        description: 'Verbose transaction data',
+      },
+      {
+        method: 'get_tfl_tx_finality_from_hash',
+        params: [tx.txid],
+        description: 'Transaction finality status',
+      },
+    ]}
+  />
 {/if}

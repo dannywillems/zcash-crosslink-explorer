@@ -3,12 +3,36 @@
   import HashLink from '$lib/components/common/HashLink.svelte';
   import LoadingSpinner from '$lib/components/common/LoadingSpinner.svelte';
   import ErrorMessage from '$lib/components/common/ErrorMessage.svelte';
+  import RpcDebug from '$lib/components/common/RpcDebug.svelte';
   import {
     getRawMempool,
     getMempoolInfo,
     getBlockchainInfo,
     getBlock,
   } from '$lib/api/index.js';
+
+  const queries = [
+    {
+      method: 'getrawmempool',
+      params: [false],
+      description: 'Pending transaction IDs',
+    },
+    {
+      method: 'getrawmempool',
+      params: [true],
+      description: 'Verbose mempool with fee/size info',
+    },
+    {
+      method: 'getmempoolinfo',
+      params: [],
+      description: 'Mempool summary (may not be implemented)',
+    },
+    {
+      method: 'getrawtransaction',
+      params: ['(txid)', 1],
+      description: 'Full transaction data',
+    },
+  ];
   import { connected } from '$lib/stores/endpoint.js';
   import { formatTimeAgo, formatZec } from '$lib/utils/format.js';
   import type { Block, MempoolInfo, RawTransaction } from '$lib/types/index.js';
@@ -188,5 +212,6 @@
         {/if}
       </div>
     {/if}
+    <RpcDebug {queries} />
   {/if}
 </div>
