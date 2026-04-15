@@ -24,17 +24,20 @@
 
 <header
   class="sticky top-0 z-50 border-b bg-[var(--bg-raised)]
-         border-[var(--bd)] backdrop-blur-sm"
+         border-[var(--bd)]"
 >
-  <div class="mx-auto max-w-7xl px-4 py-3">
-    <div class="flex items-center justify-between gap-4">
+  <!-- Top row: logo, nav, theme -->
+  <div class="mx-auto max-w-7xl px-4">
+    <div class="flex h-12 items-center justify-between gap-4">
       <a
         href="{base}/"
-        class="flex items-center gap-2 text-xl font-bold
-               text-[var(--color-primary)] no-underline"
+        class="flex items-center gap-2 text-lg font-bold
+               text-[var(--color-primary)] no-underline
+               shrink-0"
       >
-        <img src="{base}/zcash-icon.svg" alt="Zcash" class="h-7 w-7" />
-        Crosslink Explorer
+        <img src="{base}/zcash-icon.svg" alt="Zcash" class="h-6 w-6" />
+        <span class="hidden sm:inline">Crosslink Explorer</span>
+        <span class="sm:hidden">Explorer</span>
       </a>
 
       <nav class="hidden items-center gap-1 lg:flex">
@@ -52,55 +55,62 @@
         {/each}
       </nav>
 
-      <div class="hidden items-center gap-3 lg:flex">
-        <SearchBar />
-        <EndpointInput />
+      <div class="flex items-center gap-2">
         <ThemeToggle />
+        <button
+          class="rounded-md p-2 text-[var(--fg-muted)]
+                 hover:text-[var(--fg)] lg:hidden"
+          onclick={() => (mobileOpen = !mobileOpen)}
+          aria-label="Toggle menu"
+        >
+          {#if mobileOpen}
+            <svg
+              class="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          {:else}
+            <svg
+              class="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          {/if}
+        </button>
       </div>
-
-      <button
-        class="rounded-md p-2 text-[var(--fg-muted)]
-               hover:text-[var(--fg)] lg:hidden"
-        onclick={() => (mobileOpen = !mobileOpen)}
-        aria-label="Toggle menu"
-      >
-        {#if mobileOpen}
-          <svg
-            class="h-6 w-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        {:else}
-          <svg
-            class="h-6 w-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          </svg>
-        {/if}
-      </button>
     </div>
 
-    {#if mobileOpen}
-      <div
-        class="mt-3 flex flex-col gap-2 border-t
-                  border-[var(--bd)] pt-3 lg:hidden"
-      >
+    <!-- Second row: search + endpoint (desktop) -->
+    <div
+      class="hidden items-center gap-3 border-t
+             border-[var(--bd)]/50 py-2 lg:flex"
+    >
+      <SearchBar />
+      <div class="mx-auto"></div>
+      <EndpointInput />
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  {#if mobileOpen}
+    <div class="border-t border-[var(--bd)] px-4 py-3 lg:hidden">
+      <nav class="flex flex-col gap-1">
         {#each navItems as item}
           <a
             href={item.href}
@@ -113,12 +123,14 @@
             {item.label}
           </a>
         {/each}
-        <div class="flex flex-col gap-2 pt-2">
-          <SearchBar />
-          <EndpointInput />
-          <ThemeToggle />
-        </div>
+      </nav>
+      <div
+        class="mt-3 flex flex-col gap-2 border-t
+                  border-[var(--bd)]/50 pt-3"
+      >
+        <SearchBar />
+        <EndpointInput />
       </div>
-    {/if}
-  </div>
+    </div>
+  {/if}
 </header>

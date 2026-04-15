@@ -14,7 +14,7 @@
     errorMsg = '';
     const trimmed = url.trim();
     if (!trimmed) {
-      errorMsg = 'Enter an RPC endpoint URL';
+      errorMsg = 'Enter a URL';
       return;
     }
 
@@ -24,6 +24,7 @@
     try {
       await getBlockchainInfo();
       connected.set(true);
+      errorMsg = '';
     } catch (e) {
       errorMsg = e instanceof Error ? e.message : 'Connection failed';
       connected.set(false);
@@ -39,13 +40,15 @@
 </script>
 
 <div class="flex items-center gap-2">
+  <span class="text-xs text-[var(--fg-muted)] shrink-0"> RPC Node: </span>
   <div class="relative">
     <input
       type="text"
       bind:value={url}
       placeholder="http://localhost:8232"
-      class="w-52 rounded-md border border-[var(--bd)]
-             bg-[var(--bg)] px-3 py-1.5 text-xs
+      title={errorMsg || 'JSON-RPC endpoint URL'}
+      class="w-56 rounded-md border border-[var(--bd)]
+             bg-[var(--bg)] px-3 py-1 text-xs
              font-mono text-[var(--fg)]
              placeholder-[var(--fg-muted)]
              focus:border-[var(--color-primary)]
@@ -65,16 +68,16 @@
     onclick={handleConnect}
     disabled={testing}
     class="rounded-md border border-[var(--color-primary)]
-           px-3 py-1.5 text-xs font-medium
+           px-3 py-1 text-xs font-medium shrink-0
            text-[var(--color-primary)]
            hover:bg-[var(--color-primary)]/10
            disabled:opacity-50 transition-colors"
   >
-    {testing ? 'Testing...' : 'Connect'}
+    {testing ? '...' : 'Connect'}
   </button>
+  {#if isConnected}
+    <span class="text-xs text-[var(--color-success)] shrink-0">
+      Connected
+    </span>
+  {/if}
 </div>
-{#if errorMsg}
-  <p class="mt-1 max-w-xs text-xs text-[var(--color-danger)]">
-    {errorMsg}
-  </p>
-{/if}
