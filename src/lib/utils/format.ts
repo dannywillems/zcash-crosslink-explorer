@@ -21,10 +21,13 @@ export function formatTimeAgo(timestamp: number): string {
   const now = Math.floor(Date.now() / 1000);
   const diff = now - timestamp;
 
+  if (diff < 0) return 'in the future';
   if (diff < 60) return `${diff}s ago`;
   if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
   if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
-  return `${Math.floor(diff / 86400)}d ago`;
+  if (diff < 86400 * 30) return `${Math.floor(diff / 86400)}d ago`;
+  // For very old timestamps, show the actual date
+  return new Date(timestamp * 1000).toLocaleDateString();
 }
 
 export function formatDateTime(timestamp: number): string {

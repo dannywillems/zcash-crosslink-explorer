@@ -1,8 +1,14 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import '../app.css';
   import Header from '$lib/components/common/Header.svelte';
+  import { autoConnect } from '$lib/stores/endpoint.js';
 
   let { children } = $props();
+
+  onMount(() => {
+    autoConnect();
+  });
 </script>
 
 <div class="flex min-h-screen flex-col">
@@ -14,6 +20,6 @@
     class="border-t border-[var(--bd)] py-4 text-center
            text-xs text-[var(--fg-muted)]"
   >
-    Zcash Crosslink Explorer. Not affiliated with Electric Coin Company.
+    Zcash Crosslink Explorer
   </footer>
 </div>

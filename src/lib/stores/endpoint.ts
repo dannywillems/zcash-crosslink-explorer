@@ -25,3 +25,17 @@ export function updateEndpoint(url: string): void {
 export function getStoredEndpoint(): string {
   return get(endpoint);
 }
+
+export async function autoConnect(): Promise<void> {
+  const url = get(endpoint);
+  if (!url) return;
+
+  setEndpoint(url);
+  try {
+    const { getBlockchainInfo } = await import('$lib/api/blocks.js');
+    await getBlockchainInfo();
+    connected.set(true);
+  } catch {
+    // Silently fail; user can click Connect manually
+  }
+}

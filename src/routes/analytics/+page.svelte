@@ -6,6 +6,7 @@
     getBlockchainInfo,
     getMiningInfo,
     getMempoolInfo,
+    getRawMempool,
     getPeerInfo,
     getNetworkHashPs,
     getDifficulty,
@@ -58,7 +59,17 @@
 
       if (results[0].status === 'fulfilled') chainInfo = results[0].value;
       if (results[1].status === 'fulfilled') miningInfo = results[1].value;
-      if (results[2].status === 'fulfilled') mempoolInfo = results[2].value;
+      if (results[2].status === 'fulfilled') {
+        mempoolInfo = results[2].value;
+      } else {
+        // Fallback: getmempoolinfo not in Zebra, use getrawmempool
+        try {
+          const pool = (await getRawMempool(false)) as string[];
+          mempoolInfo = { size: pool.length, bytes: 0, usage: 0 };
+        } catch {
+          // Neither method available
+        }
+      }
       if (results[3].status === 'fulfilled')
         peerCount = results[3].value.length;
       if (results[4].status === 'fulfilled') hashRate = results[4].value;
