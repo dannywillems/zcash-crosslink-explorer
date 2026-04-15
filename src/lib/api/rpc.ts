@@ -12,6 +12,30 @@ export function getEndpoint(): string {
 
 let requestId = 0;
 
+const RPC_TIMEOUT_MS = 10000;
+
+async function fetchWithTimeout(
+  url: string,
+  init: RequestInit,
+): Promise<Response> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), RPC_TIMEOUT_MS);
+  try {
+    const response = await fetch(url, {
+      ...init,
+      signal: controller.signal,
+    });
+    return response;
+  } catch (e) {
+    if (e instanceof DOMException && e.name === 'AbortError') {
+      throw new Error('RPC timeout (>10s)');
+    }
+    throw e;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 export async function rpcCall<T>(
   method: string,
   params: unknown[] = [],
@@ -30,7 +54,7 @@ export async function rpcCall<T>(
     params,
   });
 
-  const response = await fetch(rpcEndpoint, {
+  const response = await fetchWithTimeout(rpcEndpoint, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body,
@@ -89,7 +113,7 @@ export async function rpcCallRaw(
     params,
   });
 
-  const response = await fetch(rpcEndpoint, {
+  const response = await fetchWithTimeout(rpcEndpoint, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body,

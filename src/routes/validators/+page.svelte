@@ -59,7 +59,16 @@
       rosterZats = results[1].value;
     }
     if (results.every(r => r.status === 'rejected')) {
-      error = 'Could not load staking roster';
+      const reasons = results
+        .map(r =>
+          r.status === 'rejected'
+            ? r.reason instanceof Error
+              ? r.reason.message
+              : String(r.reason)
+            : '',
+        )
+        .filter(Boolean);
+      error = 'Could not load staking roster: ' + reasons.join('; ');
     }
     loading = false;
   }
