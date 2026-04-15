@@ -22,3 +22,7 @@ export async function getTflBlockFinalityFromHash(
 export async function getTflTxFinalityFromHash(hash: string): Promise<unknown> {
   return rpcCall<unknown>('get_tfl_tx_finality_from_hash', [hash]);
 }
+
+export async function getTflFatPointerToBftChainTip(): Promise<unknown> {
+  return rpcCall<unknown>('get_tfl_fat_pointer_to_bft_chain_tip');
+}

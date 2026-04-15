@@ -18,12 +18,19 @@ dev: ## Run SvelteKit dev server
 build: ## Build for production
 	npx vite build
 
+.PHONY: build-release
+build-release: ## Build for production (GH Pages)
+	BASE_PATH=/zcash-crosslink-explorer npx vite build
+
 .PHONY: preview
 preview: ## Preview production build
 	npx vite preview
 
 .PHONY: check
-check: ## Run svelte-check type checker
+check: check-format typecheck build ## Run all checks
+
+.PHONY: typecheck
+typecheck: ## Run svelte-check type checker
 	npx svelte-kit sync && \
 		npx svelte-check --tsconfig ./tsconfig.json
 
@@ -35,9 +42,17 @@ check-format: ## Check code formatting
 format: ## Format code
 	npx prettier --write .
 
+.PHONY: lint
+lint: check-format typecheck lint-docker ## Run all linters
+
 .PHONY: lint-shell
 lint-shell: ## Lint shell scripts using shellcheck
-	shellcheck .github/scripts/*.sh
+	@if compgen -G ".github/scripts/*.sh" \
+		> /dev/null 2>&1; then \
+		shellcheck .github/scripts/*.sh; \
+	else \
+		echo "No shell scripts to check"; \
+	fi
 
 .PHONY: lint-docker
 lint-docker: ## Lint Dockerfile using hadolint
