@@ -84,14 +84,14 @@
 </script>
 
 <svelte:head>
-  <title>Top Addresses - Zcash Crosslink Explorer</title>
+  <title>Validators - Zcash Crosslink Explorer</title>
 </svelte:head>
 
 <div class="space-y-6">
   <div>
-    <h1 class="text-2xl font-bold">Top Addresses</h1>
+    <h1 class="text-2xl font-bold">Validators</h1>
     <p class="mt-1 text-sm text-[var(--fg-muted)]">
-      Ranked by staking position and voting power
+      PoS validators ranked by stake and voting power
     </p>
   </div>
 
