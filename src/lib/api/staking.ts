@@ -28,9 +28,9 @@ export async function getTflFatPointerToBftChainTip(): Promise<unknown> {
 }
 
 export interface RosterMember {
-  pub_key: string;
-  voting_power: number;
-  txids: { txid: string; zats: number }[];
+  pub_key?: string;
+  voting_power?: number;
+  txids?: { txid?: string; zats?: number }[];
 }
 
 export async function getTflRosterZats(): Promise<RosterMember[]> {

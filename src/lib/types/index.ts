@@ -74,22 +74,22 @@ export interface MempoolInfo {
 }
 
 export interface PeerInfo {
-  id: number;
-  addr: string;
+  id?: number;
+  addr?: string;
   addrlocal?: string;
-  services: string;
-  lastsend: number;
-  lastrecv: number;
-  conntime: number;
-  timeoffset: number;
+  services?: string;
+  lastsend?: number;
+  lastrecv?: number;
+  conntime?: number;
+  timeoffset?: number;
   pingtime?: number;
-  version: number;
-  subver: string;
-  inbound: boolean;
-  startingheight: number;
-  banscore: number;
-  synced_headers: number;
-  synced_blocks: number;
+  version?: number;
+  subver?: string;
+  inbound?: boolean;
+  startingheight?: number;
+  banscore?: number;
+  synced_headers?: number;
+  synced_blocks?: number;
 }
 
 export interface NetworkInfo {
@@ -114,8 +114,8 @@ export interface AddressUtxo {
 }
 
 export interface StakingRosterEntry {
-  public_key: string;
-  voting_power: number;
+  public_key?: string;
+  voting_power?: number;
   txid?: string;
 }
 

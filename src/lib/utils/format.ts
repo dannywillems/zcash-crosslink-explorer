@@ -13,6 +13,7 @@ export function truncateHash(
   prefixLen: number = 8,
   suffixLen: number = 8,
 ): string {
+  if (!hash) return '-';
   if (hash.length <= prefixLen + suffixLen + 3) return hash;
   return `${hash.slice(0, prefixLen)}...${hash.slice(-suffixLen)}`;
 }

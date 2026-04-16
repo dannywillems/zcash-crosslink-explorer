@@ -16,7 +16,7 @@
   let isConnected = $state(false);
   connected.subscribe(v => {
     isConnected = v;
-    if (v) load();
+    if (v && !loading) load();
   });
 
   let identifier = $derived(page.params.identifier);

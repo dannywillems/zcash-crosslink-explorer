@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import '../app.css';
   import Header from '$lib/components/common/Header.svelte';
+  import RpcActivity from '$lib/components/common/RpcActivity.svelte';
   import { autoConnect } from '$lib/stores/endpoint.js';
 
   let { children } = $props();
@@ -15,6 +16,9 @@
   <Header />
   <main class="mx-auto w-full max-w-7xl flex-1 px-4 py-6">
     {@render children()}
+    <div class="mt-6">
+      <RpcActivity />
+    </div>
   </main>
   <footer
     class="border-t border-[var(--bd)] py-4 text-center

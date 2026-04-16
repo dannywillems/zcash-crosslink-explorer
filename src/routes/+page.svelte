@@ -1,6 +1,7 @@
 <script lang="ts">
   import NetworkStats from '$lib/components/dashboard/NetworkStats.svelte';
   import RecentBlocks from '$lib/components/dashboard/RecentBlocks.svelte';
+  import ValidatorRoster from '$lib/components/staking/ValidatorRoster.svelte';
   import RpcDebug from '$lib/components/common/RpcDebug.svelte';
 
   const queries = [
@@ -29,6 +30,11 @@
       params: [],
       description: 'Best block hash',
     },
+    {
+      method: 'get_tfl_roster_zec',
+      params: [],
+      description: 'Validator/finalizer roster',
+    },
   ];
 </script>
 
@@ -38,6 +44,7 @@
 
 <div class="space-y-6">
   <NetworkStats />
+  <ValidatorRoster />
   <RecentBlocks />
   <RpcDebug {queries} />
 </div>

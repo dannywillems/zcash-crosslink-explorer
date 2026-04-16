@@ -6,7 +6,6 @@
   import RpcDebug from '$lib/components/common/RpcDebug.svelte';
   import {
     getRawMempool,
-    getMempoolInfo,
     getBlockchainInfo,
     getBlock,
   } from '$lib/api/index.js';
@@ -21,11 +20,6 @@
       method: 'getrawmempool',
       params: [true],
       description: 'Verbose mempool with fee/size info',
-    },
-    {
-      method: 'getmempoolinfo',
-      params: [],
-      description: 'Mempool summary (may not be implemented)',
     },
     {
       method: 'getrawtransaction',
@@ -49,7 +43,7 @@
   let isConnected = $state(false);
   connected.subscribe(v => {
     isConnected = v;
-    if (v) load();
+    if (v && !loading) load();
   });
 
   async function load(): Promise<void> {
@@ -58,13 +52,14 @@
     try {
       const results = await Promise.allSettled([
         getRawMempool(false) as Promise<string[]>,
-        getMempoolInfo(),
         loadRecentBlocks(),
       ]);
 
-      if (results[0].status === 'fulfilled')
-        mempoolTxids = results[0].value as string[];
-      if (results[1].status === 'fulfilled') mempoolInfo = results[1].value;
+      if (results[0].status === 'fulfilled') {
+        const pool = results[0].value as string[];
+        mempoolTxids = pool;
+        mempoolInfo = { size: pool.length, bytes: 0, usage: 0 };
+      }
     } catch (e) {
       error = e instanceof Error ? e.message : 'Failed to load';
     } finally {
