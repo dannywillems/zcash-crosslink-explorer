@@ -10,15 +10,19 @@ JSON-RPC.
 ## Features
 
 - **Dashboard** with network stats (height, difficulty, hash rate, finality,
-  peers) and recent blocks
+  peers), validator roster, and recent blocks
 - **Block explorer** with paginated list and full block detail (transactions,
   merkle root, previous/next navigation)
 - **Transaction viewer** with inputs, outputs, ZEC amounts, and confirmation
   status
 - **Mempool browser** showing pending transactions and pool size
-- **Staking & finality** page with validator roster, voting power distribution,
-  and finality gap tracking
-- **Analytics** with average block time, tx/block stats, and block size chart
+- **Validators** page with ranked finalizer roster, voting power distribution,
+  stake share percentages, and detailed zatoshi/tx breakdown
+- **Staking & finality** page with finality gap tracking
+- **Analytics** with per-section loading (stats, block size chart, network peers
+  table with address, client, direction, ping, and sync height)
+- **RPC activity log** on every page showing live in-flight and completed RPC
+  calls with expandable request/response JSON, curl copy, and duration
 - **Search** by block height, block hash, or transaction hash
 - **Custom node endpoint** input to connect to any running Crosslink node
 - **Dark/light theme** with system preference detection
@@ -77,18 +81,20 @@ on every tagged release.
 
 ## RPC methods used
 
-| Method                                | Page                         |
-| ------------------------------------- | ---------------------------- |
-| `getblockchaininfo`                   | Dashboard, Blocks, Analytics |
-| `getblock` / `getblockhash`           | Block detail, Recent blocks  |
-| `getblockcount`                       | Blocks pagination            |
-| `getrawtransaction`                   | Transaction detail           |
-| `getrawmempool` / `getmempoolinfo`    | Transactions (mempool)       |
-| `getpeerinfo`                         | Dashboard, Analytics         |
-| `getmininginfo`                       | Dashboard                    |
-| `getnetworkhashps` / `getdifficulty`  | Analytics                    |
-| `get_tfl_roster_zec`                  | Staking                      |
-| `get_tfl_final_block_height_and_hash` | Dashboard, Staking           |
+| Method                                | Page                              |
+| ------------------------------------- | --------------------------------- |
+| `getblockchaininfo`                   | Dashboard, Blocks, Analytics      |
+| `getblock` / `getblockhash`           | Block detail, Recent blocks       |
+| `getblockcount`                       | Blocks pagination                 |
+| `getrawtransaction`                   | Transaction detail                |
+| `getrawmempool`                       | Transactions (mempool), Analytics |
+| `getpeerinfo`                         | Dashboard, Analytics              |
+| `getmininginfo`                       | Dashboard, Analytics              |
+| `getnetworkhashps` / `getdifficulty`  | Analytics                         |
+| `get_tfl_roster_zec`                  | Dashboard, Validators, Staking    |
+| `get_tfl_roster_zats`                 | Validators                        |
+| `get_tfl_final_block_height_and_hash` | Dashboard, Staking                |
+| `getbondinfo`                         | Validators                        |
 
 ## License
 
