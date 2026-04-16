@@ -47,7 +47,7 @@ export async function rpcCall<T>(
 
   requestId += 1;
   const id = requestId;
-  const activityId = rpcActivityStart(method);
+  const activityId = rpcActivityStart(method, params);
 
   const body = JSON.stringify({
     jsonrpc: '2.0',
@@ -73,39 +73,17 @@ export async function rpcCall<T>(
 
     if (data.error) {
       const msg = `RPC error ${data.error.code}: ` + data.error.message;
-      rpcActivityEnd(activityId, 'error', msg);
+      rpcActivityEnd(activityId, 'error', msg, data);
       throw new Error(msg);
     }
 
-    rpcActivityEnd(activityId, 'ok');
+    rpcActivityEnd(activityId, 'ok', undefined, data);
     return data.result as T;
   } catch (e) {
     const msg = e instanceof Error ? e.message : 'Unknown error';
     rpcActivityEnd(activityId, 'error', msg);
     throw e;
   }
-}
-
-export interface RpcLog {
-  method: string;
-  params: unknown[];
-  result: unknown;
-}
-
-const rpcLogs: RpcLog[] = [];
-let logEnabled = false;
-
-export function enableRpcLogging(on: boolean): void {
-  logEnabled = on;
-  if (!on) rpcLogs.length = 0;
-}
-
-export function getRpcLogs(): RpcLog[] {
-  return rpcLogs;
-}
-
-export function clearRpcLogs(): void {
-  rpcLogs.length = 0;
 }
 
 export async function rpcCallRaw(
@@ -132,15 +110,9 @@ export async function rpcCallRaw(
 
   if (!response.ok) {
     throw new Error(
-      `RPC HTTP error: ${response.status} ${response.statusText}`,
+      `RPC HTTP error: ${response.status} ` + response.statusText,
     );
   }
 
-  const data = await response.json();
-
-  if (logEnabled) {
-    rpcLogs.push({ method, params, result: data });
-  }
-
-  return data;
+  return await response.json();
 }
