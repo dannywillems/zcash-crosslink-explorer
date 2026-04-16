@@ -294,8 +294,12 @@
                     </span>
                   </td>
                   <td class="px-4 py-2 font-mono text-xs">
-                    <span title={entry.public_key ?? ''}>
-                      {truncateHash(entry.public_key ?? '', 12, 12)}
+                    <span title={entry.public_key ?? entry.pub_key ?? ''}>
+                      {truncateHash(
+                        entry.public_key ?? entry.pub_key ?? '',
+                        12,
+                        12,
+                      )}
                     </span>
                   </td>
                   <td

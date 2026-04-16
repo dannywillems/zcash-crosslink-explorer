@@ -42,6 +42,13 @@ export interface RawTransaction {
   time?: number;
   blocktime?: number;
   size?: number;
+  vjoinsplit?: unknown[];
+  vShieldedSpend?: unknown[];
+  vShieldedOutput?: unknown[];
+  orchard?: {
+    actions?: unknown[];
+    [key: string]: unknown;
+  };
 }
 
 export interface TransactionInput {
@@ -115,6 +122,7 @@ export interface AddressUtxo {
 
 export interface StakingRosterEntry {
   public_key?: string;
+  pub_key?: string;
   voting_power?: number;
   txid?: string;
 }

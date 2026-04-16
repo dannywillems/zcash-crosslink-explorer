@@ -133,6 +133,17 @@
           >
             {txid}
           </a>
+          {#if i === 0}
+            <span
+              class="shrink-0 rounded-full
+                     bg-[var(--color-primary)]/15
+                     px-2 py-0.5 text-[10px]
+                     font-medium
+                     text-[var(--color-primary)]"
+            >
+              coinbase
+            </span>
+          {/if}
         </div>
       {/each}
     </div>

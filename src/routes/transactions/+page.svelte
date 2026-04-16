@@ -6,6 +6,7 @@
   import RpcDebug from '$lib/components/common/RpcDebug.svelte';
   import {
     getRawMempool,
+    getRawTransaction,
     getBlockchainInfo,
     getBlock,
   } from '$lib/api/index.js';
@@ -37,6 +38,7 @@
   let mempoolTxids = $state<string[]>([]);
   let mempoolInfo = $state<MempoolInfo | null>(null);
   let recentBlocks = $state<Block[]>([]);
+  let txDetails = $state<Map<string, RawTransaction>>(new Map());
   let loading = $state(false);
   let error = $state('');
 
@@ -80,6 +82,38 @@
       }
     }
     recentBlocks = blocks;
+
+    // Fetch tx details in background for pool tags
+    const allTxids = blocks.flatMap(b => b.tx);
+    const results = await Promise.allSettled(
+      allTxids.map(txid => getRawTransaction(txid)),
+    );
+    const map = new Map<string, RawTransaction>();
+    results.forEach((r, idx) => {
+      if (r.status === 'fulfilled') {
+        map.set(allTxids[idx], r.value);
+      }
+    });
+    txDetails = map;
+  }
+
+  function txPoolTags(txid: string): ('transparent' | 'sapling' | 'orchard')[] {
+    const tx = txDetails.get(txid);
+    if (!tx) return [];
+    const tags: ('transparent' | 'sapling' | 'orchard')[] = [];
+    if (tx.vin.some(i => i.txid) || tx.vout.length > 0) {
+      tags.push('transparent');
+    }
+    if (
+      (tx.vShieldedSpend && tx.vShieldedSpend.length > 0) ||
+      (tx.vShieldedOutput && tx.vShieldedOutput.length > 0)
+    ) {
+      tags.push('sapling');
+    }
+    if (tx.orchard?.actions && tx.orchard.actions.length > 0) {
+      tags.push('orchard');
+    }
+    return tags;
   }
 </script>
 
@@ -151,9 +185,10 @@
               {block.tx.length} txs
             </div>
             <div class="divide-y divide-[var(--bd)]/50">
-              {#each block.tx as txid}
+              {#each block.tx as txid, i}
                 <div
-                  class="px-4 py-2
+                  class="flex items-center gap-2
+                         px-4 py-2
                          hover:bg-[var(--color-primary)]/5
                          transition-colors"
                 >
@@ -163,6 +198,31 @@
                     prefixLen={16}
                     suffixLen={16}
                   />
+                  {#if i === 0}
+                    <span
+                      class="shrink-0 rounded-full
+                             bg-[var(--color-primary)]/15
+                             px-2 py-0.5 text-[10px]
+                             font-medium
+                             text-[var(--color-primary)]"
+                    >
+                      coinbase
+                    </span>
+                  {/if}
+                  {#each txPoolTags(txid) as tag}
+                    <span
+                      class="shrink-0 rounded-full
+                             px-2 py-0.5 text-[10px]
+                             font-medium
+                             {tag === 'transparent'
+                        ? 'bg-blue-500/15 text-blue-400'
+                        : tag === 'sapling'
+                          ? 'bg-purple-500/15 text-purple-400'
+                          : 'bg-green-500/15 text-green-400'}"
+                    >
+                      {tag}
+                    </span>
+                  {/each}
                 </div>
               {/each}
             </div>

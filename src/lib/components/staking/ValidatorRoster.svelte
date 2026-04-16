@@ -118,8 +118,12 @@
                   </span>
                 </td>
                 <td class="px-4 py-2 font-mono text-sm">
-                  <span title={entry.public_key ?? ''}>
-                    {truncateHash(entry.public_key ?? '', 10, 10)}
+                  <span title={entry.public_key ?? entry.pub_key ?? ''}>
+                    {truncateHash(
+                      entry.public_key ?? entry.pub_key ?? '',
+                      10,
+                      10,
+                    )}
                   </span>
                 </td>
                 <td class="px-4 py-2 tabular-nums">

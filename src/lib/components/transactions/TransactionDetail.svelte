@@ -10,6 +10,16 @@
   import type { RawTransaction } from '$lib/types/index.js';
 
   let { tx }: { tx: RawTransaction } = $props();
+
+  let isCoinbase = $derived(tx.vin.length > 0 && !!tx.vin[0].coinbase);
+  let hasTransparent = $derived(tx.vin.some(i => i.txid) || tx.vout.length > 0);
+  let hasSapling = $derived(
+    (tx.vShieldedSpend && tx.vShieldedSpend.length > 0) ||
+      (tx.vShieldedOutput && tx.vShieldedOutput.length > 0),
+  );
+  let hasOrchard = $derived(
+    tx.orchard?.actions && tx.orchard.actions.length > 0,
+  );
 </script>
 
 <div class="space-y-6">
@@ -17,11 +27,12 @@
     class="rounded-lg border border-[var(--bd)]
            bg-[var(--bg-raised)] p-6"
   >
-    <div class="flex items-center gap-3">
+    <div class="flex flex-wrap items-center gap-2">
       <h2 class="text-xl font-bold">Transaction</h2>
       {#if tx.confirmations !== undefined}
         <span
-          class="rounded-full px-2 py-0.5 text-xs font-medium
+          class="rounded-full px-2 py-0.5 text-xs
+                 font-medium
                  {tx.confirmations > 0
             ? 'bg-[var(--color-success)]/15 text-[var(--color-success)]'
             : 'bg-[var(--color-warning)]/15 text-[var(--color-warning)]'}"
@@ -29,6 +40,43 @@
           {tx.confirmations > 0
             ? `${tx.confirmations} confirmations`
             : 'Pending'}
+        </span>
+      {/if}
+      {#if isCoinbase}
+        <span
+          class="rounded-full
+                 bg-[var(--color-primary)]/15 px-2
+                 py-0.5 text-xs font-medium
+                 text-[var(--color-primary)]"
+        >
+          coinbase
+        </span>
+      {/if}
+      {#if hasTransparent && !isCoinbase}
+        <span
+          class="rounded-full bg-blue-500/15 px-2
+                 py-0.5 text-xs font-medium
+                 text-blue-400"
+        >
+          transparent
+        </span>
+      {/if}
+      {#if hasSapling}
+        <span
+          class="rounded-full bg-purple-500/15 px-2
+                 py-0.5 text-xs font-medium
+                 text-purple-400"
+        >
+          sapling
+        </span>
+      {/if}
+      {#if hasOrchard}
+        <span
+          class="rounded-full bg-green-500/15 px-2
+                 py-0.5 text-xs font-medium
+                 text-green-400"
+        >
+          orchard
         </span>
       {/if}
     </div>
